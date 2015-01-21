@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <style>
+        .row {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" style="width:100px; height:100px" width="100px" height="100px"></canvas>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="color">Enter hex color</label>
+                    <input type="text" class="form-control" id="color" placeholder="#ff0000">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+            console.log( "ready!" );
+            var canvas = document.getElementById("canvas");
+            console.log(canvas);
+            var context = canvas.getContext("2d");
+            console.log(context);
+
+            //Background
+            context.fillStyle = "#eeeeee";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            var max = 100;
+
+            for(var i = 20; i > 0; i --)
+            {
+                var x = Math.floor(Math.random() * (max - 1)) + 1;
+                var y = Math.floor(Math.random() * (max - 1)) + 1;
+
+                var w = Math.floor(Math.random() * (max - 10)) + 10;
+                var h = Math.floor(Math.random() * (max - 10)) + 10;
+
+                context.beginPath();
+                context.lineWidth = "2";
+                context.strokeStyle = "black";
+                context.rect(x, y, w, h);
+                context.stroke();
+            }
+
+            canvas.addEventListener("mousedown", function(e) {
+                console.log('Mouse down: ', e);
+                console.log('canvas: ', e);
+
+                var x = e.x;
+                var y = e.y;
+
+                console.log('x y', x, y);
+
+                var oldColor = "#eeeeee";
+
+                var newColor = "#0000ff";
+
+                if($('#color').val()) {
+                    newColor = $('#color').val();
+                }
+
+                floodFill4(context, x, y, oldColor, newColor);
+            }, true);
+        });
+
+        function floodFill4(context, x, y, oldColor, newColor) {
+            var p = context.getImageData(x, y, 1, 1).data;
+            console.log('Pixel: ', p);
+            var hex = rgbToHex(p[0], p[1], p[2]);
+            console.log('Hex: ', hex);
+            console.log('Old color: ', oldColor);
+            console.log('New color: ', newColor);
+
+            context.fillStyle = newColor;
+            context.fillRect(x, y, 1, 1);
+
+            if(hex == oldColor) {
+                context.fillStyle = newColor;
+                context.fillRect(x, y, 1, 1);
+                floodFill4(context, x, y-1, oldColor, newColor);
+                floodFill4(context, x, y+1, oldColor, newColor);
+                floodFill4(context, x-1, y, oldColor, newColor);
+                floodFill4(context, x+1, y, oldColor, newColor);
+            }
+        }
+
+        function componentToHex(c) {
+            var hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
+    </script>
+</body>
+</html>

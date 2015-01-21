@@ -3,6 +3,7 @@ __author__ = 'Nathan'
 import sys
 import random
 from PySide import QtGui, QtCore
+# import win32gui
 
 class Example(QtGui.QWidget):
 
@@ -24,65 +25,45 @@ class Example(QtGui.QWidget):
 
         size = self.size()
 
-        for i in range(20):
+        for i in range(40):
             x1 = random.randint(1, size.width()-100)
             y1 = random.randint(1, size.height()-100)
 
-            w = random.randint(1, 100)
-            h = random.randint(1, 100)
+            w = random.randint(20, 100)
+            h = random.randint(10, 100)
 
             qp.drawRect(x1, y1, w, h)
 
-        # qp.fillRect(100, 100, 10, 10, QtCore.Qt.red)
-
-        # for i in range(21):
-        #
-        #     m = i / 0.05
-        #
-        #     y = round(m) * i
-        #
-        #     x1 = 0
-        #     y1 = 0
-        #
-        #     x2 = y
-        #     y2 = 500
-        #
-        #     self.dda(qp, x1, y1, x2, y2)
+        self.floodFill4(qp, 20, 30, QtCore.Qt.white, QtCore.Qt.darkBlue)
 
         qp.end()
 
-    def plot(self, qp, x, y):
-        qp.setPen(QtCore.Qt.black)
-        qp.drawPoint(x, y)
+    def floodFill4(self, qp, x, y, old_color, new_color):
 
-    def dda(self, qp, x1, y1, x2, y2):
 
-        dx = x2 - x1
-        dy = y2 - y1
+        # points = QtCore.QPoint(x,y)
 
-        if dx > dy:
-            steps = dx
-        else:
-            steps = dy
+        window = QtGui.QPainter.window()
 
-        xincre = dx/steps
-        yincre = dy/steps
+        # pixCol = self.pixelIndex()
 
-        x = x1
-        y = y1
+        # image = QtGui.QPixmap()
 
-        self.plot(qp, x, y)
 
-        for i in range(steps):
-            x = x + xincre
-            y = y + yincre
-            self.plot(qp, round(x), round(y))
+        if(new_color == old_color):
+            qp.setPen(new_color)
+            qp.drawPoint(x, y)
+            self.floodFill4(qp, x, y-1, old_color, new_color)
+            self.floodFill4(qp, x, y+1, old_color, new_color)
+            self.floodFill4(qp, x-1, y, old_color, new_color)
+            self.floodFill4(qp, x+1, y, old_color, new_color)
 
-    # def floodFill4(self, x, y, oldColor, newColor):
-    #
-    #     if(getpixel(x,y) == oldColor):
-    #         putpixel(x, y, newColor)
-
+    # def get_pixel_colour(i_x, i_y):
+    #     i_desktop_window_id = win32gui.GetDesktopWindow()
+    #     i_desktop_window_dc = win32gui.GetWindowDC(i_desktop_window_id)
+    #     long_colour = win32gui.GetPixel(i_desktop_window_dc, i_x, i_y)
+    #     i_colour = int(long_colour)
+    #     return (i_colour & 0xff), ((i_colour >> 8) & 0xff), ((i_colour >> 16) & 0xff)
 
 
 def main():
