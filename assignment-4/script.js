@@ -156,7 +156,7 @@ $(function() {
             //house3[i][a].x = house3[i][a].x * -1;
 
             // sin * x + cos * y
-            house3[i][a].y = Math.sin(angle) * house3[i][a].x + Math.cos(angle) * house3[i][a].y;
+            house3[i][a].y = -Math.sin(angle) * house3[i][a].x + Math.cos(angle) * house3[i][a].y;
             //house3[i][a].y = house3[i][a].y * -1;
 
             console.log('House 3 rotate: ', house3[i][a]);
@@ -180,8 +180,24 @@ $(function() {
 
         for(var a = house4[i].length - 1; a >= 0; a--) {
 
-            //house4[i][a].x = house4[i][a].x - 525;
+
+
+            house4[i][a].x = house4[i][a].x + 575;
             house4[i][a].y = house4[i][a].y + 300;
+
+            console.log('House 4: ', house4[i][a]);
+        }
+    }
+
+    for(var i = house4.length - 1; i >= 0; i--) {
+
+        for(var a = house4[i].length - 1; a >= 0; a--) {
+
+
+            house4[i][a].x = house4[i][a].x - 1.5 * house4[i][a].y;
+
+            //house4[i][a].x = house4[i][a].x - 525;
+            //house4[i][a].x = house4[i][a].x * 1.5;
 
             console.log('House 4: ', house4[i][a]);
         }
@@ -202,32 +218,6 @@ $(function() {
             context.moveTo(dimensions[i][0].x, dimensions[i][0].y);
             context.lineTo(dimensions[i][1].x, dimensions[i][1].y);
             context.stroke();
-        }
-    }
-
-    function translate(dimensions, x, y) {
-        for(var i = dimensions.length - 1; i >= 0; i--) {
-
-            //console.log(dimensions[i]);
-
-            for(var a = dimensions[i].length - 1; a >= 0; a--) {
-
-                //console.log('Here: ', dimensions[i][a]);
-
-                dimensions[i][a].x = dimensions[i][a].x + x;
-                dimensions[i][a].y = dimensions[i][a].y + y;
-            }
-        }
-    }
-
-    function cloneObject(source) {
-        for (i in source) {
-            if (typeof source[i] == 'source') {
-                this[i] = new cloneObject(source[i]);
-            }
-            else{
-                this[i] = source[i];
-            }
         }
     }
 
