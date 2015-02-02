@@ -56,20 +56,12 @@ $(function() {
         var S1 = (XVmax - XVmin)/(XWmax - XWmin);
         var S2 = (YVmax - YVmin)/(YWmax - YWmin);
 
-        //console.log("Set Viewport: ", S1, S2, XVmin, XVmax, YVmin, YVmax, XWmax, XWmin, YWmax, YWmin);
-
         // Set x and y scaling factors, S1 and S2
 
         for(var i = 0; i < n; i++) {
-            //Xd[i] = XW[i];
-            //Yd[i] = Yres - YW[i];
-
             Xd[i] = Math.round(Xres * (S1 * (XW[i] - XWmin) + XVmin)); // Determine the equations for the device coordinates based
             Yd[i] = Math.round(Yres - (Yres * (S2 * (YW[i] - YWmin) - YVmin))); // On the composition of the transformation matrices for
-            //Yd[i] = Yres - YW[i] * (S2 * (YW[i] - YWmin) + YVmin); // On the composition of the transformation matrices for
             // going from world - to window - to device
-
-            //console.log('Set View Port: ', S1, S2, Xd[i], Yd[i], Xd[i]);
         }
     }
 
@@ -85,14 +77,6 @@ $(function() {
     }
 
     function drawLine(Xd1, Yd1, Xd2, Yd2) {
-
-        //Xd1 = Math.round(Xd1);
-        //Yd1 = Math.round(Yd1);
-        //Xd2 = Math.round(Xd2);
-        //Yd2 = Math.round(Yd2);
-
-        //console.log('Draw Line: ', Xd1, Yd1, Xd2, Yd2);
-
         context.beginPath();
         context.moveTo(Xd1, Yd1);
         context.lineTo(Xd2, Yd2);
@@ -103,16 +87,13 @@ $(function() {
     function main()
     {
         // Get into graphics mode
-
         getData();
         setWindow(1, 800, 1, 500);  // Clip on this window rang in world coordinates.
-        //setWindow(1, n, 300, 700);  // Clip on this window rang in world coordinates.
         setViewport(0.0, 0.5, 0.0, 1.0, n); // Put in the upper left quadrant
         graphData(n);
 
         getData();
         setWindow(1, 800, 1, 500);  // Clip on this window rang in world coordinates.
-        //setWindow(1, n, 10, 100);
         setViewport(0.5, 1.0, 0.0, 1.0, n); // Put in the upper right quadrant
         graphData(n);
     }
