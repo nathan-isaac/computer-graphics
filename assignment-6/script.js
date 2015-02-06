@@ -9,7 +9,7 @@ $(function() {
     var width = 800;
     var hight = 500;
     var depth = 4;
-    var roughness = 0.01;
+    var roughness = 5;
     var triangles = [];
     var areas = [];
 
@@ -30,18 +30,49 @@ $(function() {
     context.fillStyle = "#eeeeee";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    function getRandomDistance(val1, val2)
+    {
+        /*if(Math.round(Math.random()))
+        {
+            return - getRandomArbitrary(val1, val2);
+        }*/
+
+        return getRandomArbitrary(val1, val2);
+    }
+
+    function getRandomSign()
+    {
+        if(Math.round(Math.random()))
+        {
+            return -1;
+        }
+        return 1;
+    }
+
     function drawTriangles(x1, y1, x2, y2, x3, y3, level) {
 
         if(level <= depth)
         {
-            var midx1 = (x1+x2) / 2;
-            var midy1 = (y1+y2) / 2;
+            console.log("random number: ", getRandomDistance(x1, x2));
 
-            var midx2 = (x2+x3) / 2;
-            var midy2 = (y2+y3) / 2;
 
-            var midx3 = (x3+x1) / 2;
-            var midy3 = (y3+y1) / 2;
+            /*var x1 = getRandomDistance(x1, x1 + getRandomSign());
+            var y1 = getRandomDistance(y1, y1 + getRandomSign());
+
+            var x2 = getRandomDistance(x2, x2 + getRandomSign());
+            var y2 = getRandomDistance(y2, y2 + getRandomSign());
+
+            var x3 = getRandomDistance(x3, x3 + getRandomSign());
+            var y3 = getRandomDistance(y3, y3 + getRandomSign());*/
+
+            var midx1 = (x1+x2) / 2 + getRandomDistance(x1, x2) / 50;
+            var midy1 = (y1+y2) / 2 + getRandomDistance(y1, y2) / 50;
+
+            var midx2 = (x2+x3) / 2 + getRandomDistance(x2, x3) / 50;
+            var midy2 = (y2+y3) / 2 + getRandomDistance(y2, y3) / 50;
+
+            var midx3 = (x3+x1) / 2 + getRandomDistance(x3, x1) / 50;
+            var midy3 = (y3+y1) / 2 + getRandomDistance(y3, y1) / 50;
 
             if(level == depth)
             {
@@ -93,9 +124,11 @@ $(function() {
         context.lineTo(x2, y2);
         context.lineTo(x3, y3);
         context.closePath();
-        context.stroke();
-        //context.fillStyle = float2color(area / 1000);
-        //context.fill();
+        //context.stroke();
+        context.fillStyle = float2color(area / 1000);
+        context.fill();
+
+        console.log('fill color: ', float2color(area / 1000))
     }
 
     function getRandomArbitrary(min, max) {
