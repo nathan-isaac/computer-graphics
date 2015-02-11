@@ -6,6 +6,9 @@ $(function() {
     var context = canvas.getContext("2d");
     console.log(context);
 
+    context.fillStyle = "#eeeeee";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
     var sierpinskiTriangle = [
         {
             a: 0.5,
@@ -153,11 +156,73 @@ $(function() {
         }
     ];
 
+    main();
+
+    ///////////////////////////////////////
+
     function main()
+    {
+        var ifs = tree;
+
+        var xOld = 0;
+        var yOld = 0;
+
+        var xNew = 0;
+        var yNew = 0;
+
+        for(var i = 100000; i > 0; i --)
+        {
+            var randomNumber = uni();
+
+            if(randomNumber < 0.85)
+            {
+                var matrixIndex = 2 - 1;
+            }
+            else if(randomNumber < 0.92)
+            {
+                var matrixIndex = 3 - 1;
+            }
+            else if(randomNumber < 0.94)
+            {
+                var matrixIndex = 2 - 1;
+            }
+            else
+            {
+                var matrixIndex = 1 - 1;
+            }
+
+            xNew = Math.round(ifs[matrixIndex].a * xOld + ifs[matrixIndex].c * yOld + ifs[matrixIndex].e);
+            yNew = Math.round(ifs[matrixIndex].b * xOld + ifs[matrixIndex].d * yOld + ifs[matrixIndex].f);
+
+            console.log("X, Y: ", xNew, yNew);
+
+            plot(xNew + 350, yNew);
+
+            xOld = xNew;
+            yOld = yNew;
+        }
+    }
+
+    function plot(x, y)
+    {
+        //context.beginPath();
+        //context.moveTo(x, y);
+        //context.lineTo(x, y);
+        //context.closePath();
+
+        context.fillStyle = "#000000";
+        context.fillRect(x, y, 1, 1);
+    }
+
+    function uni()
+    {
+        return Math.random();
+    }
+
+    function probability()
     {
 
     }
 
-    main();
 });
 
