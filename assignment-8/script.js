@@ -8,8 +8,10 @@ $(function() {
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
 
-    //context.fillStyle = "#eeeeee";
-    //context.fillRect(0, 0, canvas.width, canvas.height);
+    context.save();
+    context.fillStyle = "#eeeeee";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.restore();
 
     var width = 800;
     var hight = 500;
