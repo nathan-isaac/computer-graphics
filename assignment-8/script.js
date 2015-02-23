@@ -1,3 +1,7 @@
+
+// Help: http://diveintohtml5.info/canvas.html
+// http://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
+// http://www.sitepoint.com/html5-canvas-draw-bezier-curves/
 $(function() {
     console.log( "ready!" );
 
