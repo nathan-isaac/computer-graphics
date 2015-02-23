@@ -2,9 +2,10 @@ $(function() {
     console.log( "ready!" );
 
     var canvas = document.getElementById("canvas");
-    console.log(canvas);
     var context = canvas.getContext("2d");
-    console.log(context);
+
+    //context.fillStyle = "#eeeeee";
+    //context.fillRect(0, 0, canvas.width, canvas.height);
 
     var width = 800;
     var hight = 500;
@@ -12,7 +13,30 @@ $(function() {
     var nMax = 20;
     var mMax = 500;
 
-    var controlPoint = [];
+    var controlPoint;
+
+    var controlPoints = [
+        {
+            x: 20,
+            y: 48
+        },
+        {
+            x: 230,
+            y: 460
+        },
+        {
+            x: 422,
+            y: 345
+        },
+        {
+            x: 455,
+            y: 432
+        },
+        {
+            x: 120,
+            y: 345
+        }
+    ];
 
     var c = [];
 
@@ -27,27 +51,28 @@ $(function() {
     {
         var m;
 
-        var n = $('.control_points').val();
+        //var n = $('.control_points').val();
+        var n = 3;
 
-        get_ctrl_points(n);
+        var points = get_ctrl_points();
 
-        coefs(n, c);
+        /*coefs(n, c);
 
         var m = $('.segments').val();
 
         for ( var i = 0; i <= m; i++)
         {
             curve_points(n, i/m, x[i], y[i]);
-        }
+        }*/
 
-        initialize_graph();
+        //initialize_graph();
 
-        plot_ctrl_points(n, ctrlpoint);
+        plot_ctrl_points(n, points);
 
-        for ( var i = 0; i < m; i++)
+        /*for ( var i = 0; i < m; i++)
         {
             line(x[i], y[i], x[i + 1], y[i + 1]);
-        }
+        }*/
     }
 
     function round(x)
@@ -55,13 +80,9 @@ $(function() {
         return Math.round(x);
     }
 
-    function get_ctrl_points(n)
+    function get_ctrl_points()
     {
-        for ( var i = 0; i <= n; i++)
-        {
-            controlPoint[i][0];
-            controlPoint[i][1];
-        }
+        return controlPoints;
     }
 
     function coefs(n, c)
@@ -92,14 +113,40 @@ $(function() {
         // You know this function
     }
 
-    function plot_ctrl_points(n, ctrlPoint)
+    function plot_ctrl_points(n, points)
     {
-        var str = [];
-        for ( var k = 0; k <= n; k++)
-        {
-            itoa(k, str, 10);
-            outtexty(ctrlPoint[k][0], controlPoint[k][1], str);
+        for (var i = points.length; i > 0; i--) {
+            console.log(points[i-1]);
+            point(points[i-1].x, points[i-1].y, context);
+            text(i, points[i-1].x, points[i-1].y);
         }
+    }
+
+    function text(text, x, y)
+    {
+        context.save();
+        context.fillStyle = '#ffffff';
+        context.font = "bold 12px sans-serif";
+        context.fillText(text, x - 3.5, y + 4);
+        context.restore();
+    }
+
+    function point(x, y, context){
+        context.save();
+        context.beginPath();
+        context.arc(x, y, 10, 0, 2 * Math.PI, true);
+        context.fill();
+        context.restore();
+
+    }
+
+    function line(x1, y1, x2, y2) {
+        context.save();
+        context.beginPath();
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+        context.restore();
     }
     
 });
