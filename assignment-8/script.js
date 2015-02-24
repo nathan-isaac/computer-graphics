@@ -5,14 +5,6 @@
 $(function() {
     console.log( "ready!" );
 
-    var canvas = document.getElementById("canvas");
-    var context = canvas.getContext("2d");
-
-    context.save();
-    context.fillStyle = "#eeeeee";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.restore();
-
     var width = 800;
     var hight = 500;
 
@@ -20,29 +12,6 @@ $(function() {
     var mMax = 500;
 
     var controlPoint;
-
-    var controlPoints = [
-        {
-            x: 20,
-            y: 48
-        },
-        {
-            x: 230,
-            y: 460
-        },
-        {
-            x: 422,
-            y: 345
-        },
-        {
-            x: 455,
-            y: 432
-        },
-        {
-            x: 120,
-            y: 345
-        }
-    ];
 
     var c = [];
 
@@ -55,11 +24,10 @@ $(function() {
 
     function main()
     {
-        var m;
+        var context = initialize_canvas();
 
-        //var n = $('.control_points').val();
-        var n = 3;
-
+        //var m;
+        var n = 4;
         var points = get_ctrl_points();
 
         /*coefs(n, c);
@@ -73,14 +41,19 @@ $(function() {
 
         //initialize_graph();
 
-        plot_ctrl_points(n, points);
+        plot_ctrl_points(n, points, context);
 
-        /*for ( var i = 0; i < m; i++)
-        {
-            line(x[i], y[i], x[i + 1], y[i + 1]);
-        }*/
+        //plot_connecting_line();
     }
 
+    function plot_connecting_line()
+    {
+        for ( var i = 0; i < m; i++)
+        {
+            line(x[i], y[i], x[i + 1], y[i + 1]);
+        }
+    }
+    
     function round(x)
     {
         return Math.round(x);
@@ -88,7 +61,28 @@ $(function() {
 
     function get_ctrl_points()
     {
-        return controlPoints;
+        return [
+            {
+                x: 20,
+                y: 48
+            },
+            {
+                x: 230,
+                y: 460
+            },
+            {
+                x: 422,
+                y: 345
+            },
+            {
+                x: 455,
+                y: 432
+            },
+            {
+                x: 120,
+                y: 345
+            }
+        ];
     }
 
     function coefs(n, c)
@@ -119,16 +113,30 @@ $(function() {
         // You know this function
     }
 
-    function plot_ctrl_points(n, points)
+    function initialize_canvas()
     {
-        for (var i = points.length; i > 0; i--) {
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+
+        context.save();
+        context.fillStyle = "#eeeeee";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.restore();
+
+        return context;
+    }
+
+    function plot_ctrl_points(n, points, context)
+    {
+        var numberOfPoints = n > points.length ? points.length : n;
+        for (var i = numberOfPoints; i > 0; i--) {
             console.log(points[i-1]);
             point(points[i-1].x, points[i-1].y, context);
-            text(i, points[i-1].x, points[i-1].y);
+            text(i, points[i-1].x, points[i-1].y, context);
         }
     }
 
-    function text(text, x, y)
+    function text(text, x, y, context)
     {
         context.save();
         context.fillStyle = '#ffffff';
@@ -156,4 +164,3 @@ $(function() {
     }
     
 });
-
