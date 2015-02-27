@@ -145,16 +145,17 @@ $(function() {
         context.restore();
     }
 
-    function point(x, y, context){
+    function point(x, y, context)
+    {
         context.save();
         context.beginPath();
         context.arc(x, y, 10, 0, 2 * Math.PI, true);
         context.fill();
         context.restore();
-
     }
 
-    function line(x1, y1, x2, y2) {
+    function line(x1, y1, x2, y2, context)
+      {
         context.save();
         context.beginPath();
         context.moveTo(x1, y1);
