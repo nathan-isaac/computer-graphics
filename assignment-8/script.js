@@ -1,9 +1,8 @@
-
 // Help: http://diveintohtml5.info/canvas.html
 // http://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
 // http://www.sitepoint.com/html5-canvas-draw-bezier-curves/
-$(function() {
-    console.log( "ready!" );
+$(function () {
+    console.log("ready!");
 
     var width = 800;
     var hight = 500;
@@ -22,45 +21,38 @@ $(function() {
 
     //////////////////////////////////////////////
 
-    function main()
-    {
+    function main() {
         var context = initialize_canvas();
 
-        //var m;
-        var n = 4;
+        var controlPoints = get_ctrl_points();
         var points = get_ctrl_points();
+        var n = points.length - 1;
+        var m = 4;
 
-        /*coefs(n, c);
+        var tri = new coefs(n + 1).display();
+        var c = tri[tri.length - 1];
+        console.log("C: ", c);
 
-        var m = $('.segments').val();
+        for (var i = 0; i <= m; i++) {
+            curve_points(n, i / m, points[i]);
+        }
 
-        for ( var i = 0; i <= m; i++)
-        {
-            curve_points(n, i/m, x[i], y[i]);
-        }*/
+        plot_ctrl_points(n, controlPoints, context);
 
-        //initialize_graph();
-
-        plot_ctrl_points(n, points, context);
-
-        //plot_connecting_line();
+        plot_connecting_line(x, y, m);
     }
 
-    function plot_connecting_line()
-    {
-        for ( var i = 0; i < m; i++)
-        {
+    function plot_connecting_line(x, y, m) {
+        for (var i = 0; i < m; i++) {
             line(x[i], y[i], x[i + 1], y[i + 1]);
         }
     }
-    
-    function round(x)
-    {
+
+    function round(x) {
         return Math.round(x);
     }
 
-    function get_ctrl_points()
-    {
+    function get_ctrl_points() {
         return [
             {
                 x: 20,
@@ -85,36 +77,27 @@ $(function() {
         ];
     }
 
-    function coefs(n, c)
-    {
-        // write code to compute the coefs
-    }
-
-    function blending_value(n, i, u)
-    {
+    function blending_value(n, i, u) {
         // write code to compute the blending value
+        var value = c[i] * 1 - u;
+        console.log('Blanding_Value: ', value);
+        return value;
     }
 
-    function curve_points(n, u, x, y)
-    {
+    function curve_points(n, u, points) {
         var bv;
-        x = y = 0;
+        //x = 0;
+        //y = 0;
 
-        for ( var i = 0; i<=n; i++)
-        {
-            bv = blending_value(n, i, u);
-            x = round(x+bv*controlPoint[i][0]);
-            y = round(y+bv*controlPoint[i][1]);
+        for (var i = 0; i <= n; i++) {
+            console.log('Curve_points: n, u, bv, x, y: ', n, u, points.x, points.y);
+            //bv = blending_value(n, i, u);
+            //x = round(x + bv * points.x);
+            //y = round(y + bv * points.y);
         }
     }
 
-    function initialize_graph()
-    {
-        // You know this function
-    }
-
-    function initialize_canvas()
-    {
+    function initialize_canvas() {
         var canvas = document.getElementById("canvas");
         var context = canvas.getContext("2d");
 
@@ -126,18 +109,16 @@ $(function() {
         return context;
     }
 
-    function plot_ctrl_points(n, points, context)
-    {
+    function plot_ctrl_points(n, points, context) {
         var numberOfPoints = n > points.length ? points.length : n;
         for (var i = numberOfPoints; i > 0; i--) {
-            console.log(points[i-1]);
-            point(points[i-1].x, points[i-1].y, context);
-            text(i, points[i-1].x, points[i-1].y, context);
+            console.log(points[i - 1]);
+            point(points[i - 1].x, points[i - 1].y, context);
+            text(i, points[i - 1].x, points[i - 1].y, context);
         }
     }
 
-    function text(text, x, y, context)
-    {
+    function text(text, x, y, context) {
         context.save();
         context.fillStyle = '#ffffff';
         context.font = "bold 12px sans-serif";
@@ -145,8 +126,7 @@ $(function() {
         context.restore();
     }
 
-    function point(x, y, context)
-    {
+    function point(x, y, context) {
         context.save();
         context.beginPath();
         context.arc(x, y, 10, 0, 2 * Math.PI, true);
@@ -154,8 +134,7 @@ $(function() {
         context.restore();
     }
 
-    function line(x1, y1, x2, y2, context)
-      {
+    function line(x1, y1, x2, y2, context) {
         context.save();
         context.beginPath();
         context.moveTo(x1, y1);
@@ -163,5 +142,31 @@ $(function() {
         context.stroke();
         context.restore();
     }
-    
+
+    function coefs(rows) {
+
+        // Number of rows the triangle contains
+        this.rows = rows;
+
+        // The 2D array holding the rows of the triangle
+        this.triangle = new Array();
+
+        // Method to print the triangle
+        this.display = function (base) {
+            if (!base)
+                base = 10;
+
+            for (var r = 0; r < rows; r++) {
+                this.triangle[r] = new Array();
+                for (var i = 0; i <= r; i++) {
+                    if (i == 0 || i == r)
+                        this.triangle[r][i] = 1;
+                    else
+                        this.triangle[r][i] = this.triangle[r - 1][i - 1] + this.triangle[r - 1][i];
+                }
+            }
+
+            return this.triangle;
+        }
+    }
 });
