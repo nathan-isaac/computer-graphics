@@ -10,12 +10,30 @@ $(function () {
     var nMax = 20;
     var mMax = 500;
 
-    var controlPoint;
+    var controlerPoints = [
+        {
+            x: 20,
+            y: 48
+        },
+        {
+            x: 230,
+            y: 100
+        },
+        {
+            x: 422,
+            y: 150
+        },
+        {
+            x: 30,
+            y: 300
+        },
+        {
+            x: 120,
+            y: 345
+        }
+    ];
 
-    var c = [];
-
-    var x = [];
-    var y = [];
+    var lines = [];
 
     main();
 
@@ -23,28 +41,27 @@ $(function () {
 
     function main() {
         var context = initialize_canvas();
-
-        var controlPoints = get_ctrl_points();
         var points = get_ctrl_points();
-        var n = points.length + 1;
-        var m = 4;
 
-        var tri = new coefs(n + 1).display();
-        var c = tri[tri.length - 1];
-        console.log("C: ", c);
+        // Number of control points
+        var n = points.length - 1;
+
+        // Number of individual lines
+        var m = 200;
 
         for (var i = 0; i <= m; i++) {
-            curve_points(n, i / m, points[i]);
+            curve_points(n, i / m, lines, points);
         }
 
-        plot_ctrl_points(n, controlPoints, context);
+        plot_connecting_line(lines, context);
 
-        plot_connecting_line(x, y, m);
+        plot_ctrl_points(n, points, context);
     }
 
-    function plot_connecting_line(x, y, m) {
-        for (var i = 0; i < m; i++) {
-            line(x[i], y[i], x[i + 1], y[i + 1]);
+    function plot_connecting_line(lines, context) {
+        //console.log(lines);
+        for (var i = 0; i < lines.length - 1; i++) {
+            line(lines[i].x, lines[i].y, lines[i + 1].x, lines[i + 1].y, context);
         }
     }
 
@@ -53,48 +70,42 @@ $(function () {
     }
 
     function get_ctrl_points() {
-        return [
-            {
-                x: 20,
-                y: 48
-            },
-            {
-                x: 230,
-                y: 460
-            },
-            {
-                x: 422,
-                y: 345
-            },
-            {
-                x: 455,
-                y: 432
-            },
-            {
-                x: 120,
-                y: 345
-            }
-        ];
+        return controlerPoints;
     }
 
     function blending_value(n, i, u) {
-        // write code to compute the blending value
-        var value = c[i] * 1 - u;
-        console.log('Blanding_Value: ', value);
-        return value;
+        var sum = 0;
+        var tri = new coefs(n + 1).display();
+        var c = tri[tri.length - 1];
+
+        for ( var j = 0; j <= n; j++)
+        {
+            sum = sum + c[j] * Math.pow(u, j) * Math.pow(1-u, n-j);
+        }
+
+        console.log('Sum: ', sum);
+        return sum;
     }
 
-    function curve_points(n, u, points) {
+    function curve_points(n, u, lines, points) {
         var bv;
-        //x = 0;
-        //y = 0;
+        var x = 0;
+        var y = 0;
 
         for (var i = 0; i <= n; i++) {
-            console.log('Curve_points: n, u, bv, x, y: ', n, u, points.x, points.y);
-            //bv = blending_value(n, i, u);
-            //x = round(x + bv * points.x);
-            //y = round(y + bv * points.y);
+            bv = blending_value(n, i, u);
+            x = round(x + bv * points[i].x);
+            y = round(y + bv * points[i].y);
+
+            console.log('Curve_points: n, u, bv, x, y', n, u, bv, x, y);
+
+            lines.push({
+                x: x,
+                y: y
+            });
         }
+
+        //console.log(points);
     }
 
     function initialize_canvas() {
@@ -112,7 +123,7 @@ $(function () {
     function plot_ctrl_points(n, points, context) {
         var numberOfPoints = n > points.length ? points.length : n;
         for (var i = numberOfPoints; i > 0; i--) {
-            console.log(points[i - 1]);
+            //console.log(points[i - 1]);
             point(points[i - 1].x, points[i - 1].y, context);
             text(i, points[i - 1].x, points[i - 1].y, context);
         }
