@@ -26,7 +26,7 @@ $(function () {
 
         var controlPoints = get_ctrl_points();
         var points = get_ctrl_points();
-        var n = points.length - 1;
+        var n = points.length + 1;
         var m = 4;
 
         var tri = new coefs(n + 1).display();
