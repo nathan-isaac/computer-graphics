@@ -12,24 +12,24 @@ $(function () {
 
     var controlerPoints = [
         {
-            x: 20,
-            y: 48
+            x: 400,
+            y: 490
         },
         {
-            x: 230,
-            y: 100
+            x: 790,
+            y: 490
         },
         {
-            x: 422,
-            y: 150
+            x: 400,
+            y: 10
         },
         {
-            x: 30,
-            y: 300
+            x: 10,
+            y: 490
         },
         {
-            x: 120,
-            y: 345
+            x: 400,
+            y: 490
         }
     ];
 
@@ -47,11 +47,13 @@ $(function () {
         var n = points.length - 1;
 
         // Number of individual lines
-        var m = 200;
+        var m = 100;
 
         for (var i = 0; i <= m; i++) {
             curve_points(n, i / m, lines, points);
         }
+
+        console.log('Lines: ', lines);
 
         plot_connecting_line(lines, context);
 
@@ -74,9 +76,27 @@ $(function () {
     }
 
     function blending_value(n, i, u) {
-        var sum = 0;
+
         var tri = new coefs(n + 1).display();
         var c = tri[tri.length - 1];
+
+        var bv = c[i];;
+
+        for(var m=1; m<=i; m++)
+        {
+            bv = bv*u;
+        }
+
+        for(var m=1; m<=n-i; m++)
+        {
+            bv = bv*(1-u);
+        }
+
+        return bv;
+
+
+        /*var sum = 0;
+
 
         for ( var j = 0; j <= n; j++)
         {
@@ -84,7 +104,7 @@ $(function () {
         }
 
         console.log('Sum: ', sum);
-        return sum;
+        return sum;*/
     }
 
     function curve_points(n, u, lines, points) {
@@ -98,12 +118,12 @@ $(function () {
             y = round(y + bv * points[i].y);
 
             console.log('Curve_points: n, u, bv, x, y', n, u, bv, x, y);
-
-            lines.push({
-                x: x,
-                y: y
-            });
         }
+
+        lines.push({
+            x: x,
+            y: y
+        });
 
         //console.log(points);
     }
